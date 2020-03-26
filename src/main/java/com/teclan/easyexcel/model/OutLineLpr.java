@@ -46,7 +46,7 @@ public class OutLineLpr {
 	private String oldBillExeRate;
 	@ExcelProperty("借据LPR基准")
 	private String billDatum;
-	@ExcelProperty("借据BP点数")
+	@ExcelProperty("借据点数")
 	private String billBpNumber;
 	
 	public String getContNo() {
@@ -66,7 +66,7 @@ public class OutLineLpr {
 	}
 
 	public String getFloatCycle() {
-		return floatCycle;
+		return Assert.assertNull(floatCycle)?"":floatCycle;
 	}
 
 	public void setFloatCycle(String floatCycle) {
@@ -74,7 +74,7 @@ public class OutLineLpr {
 	}
 
 	public String getYmCycle() {
-		return ymCycle;
+	   return Assert.assertNull(ymCycle)?"":ymCycle;
 	}
 
 	public void setYmCycle(String ymCycle) {
