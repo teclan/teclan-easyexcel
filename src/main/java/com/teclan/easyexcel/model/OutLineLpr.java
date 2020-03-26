@@ -2,6 +2,7 @@ package com.teclan.easyexcel.model;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.fastjson.JSON;
+import com.teclan.easyexcel.Utils.Assert;
 
 public class OutLineLpr {
 	
@@ -112,7 +113,7 @@ public class OutLineLpr {
 
 
 	public String getBillNo() {
-		return billNo;
+		return Assert.assertNull(billNo)?" ":billNo;
 	}
 
 
