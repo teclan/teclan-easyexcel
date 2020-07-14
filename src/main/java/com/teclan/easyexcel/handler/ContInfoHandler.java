@@ -11,7 +11,7 @@ import com.teclan.easyexcel.model.ContInfo;
 public class ContInfoHandler implements Handler{
 	private static final Logger LOGGER = LoggerFactory.getLogger(ContInfoHandler.class);
 	private String SQL_TEMPLATE="INSERT INTO SPECIFY_CONT_4_LPR (DATA_TIME,CUS_ID,CUS_NAME,CERT_CODE,PHONE,BIZ_TYPE,"
-			+ "PRD_NAME,CONT_AMOUNT,CONT_BALANCE,CONT_NO,LOAN_TERM,LOAN_START_DATE,LOAN_END_DATE,CONT_STAT,MIAN_BR_NAME,CONT_NAME) VALUES ('%s','%s,'%s','%s,'%s','%s,'%s','%s,'%s','%s,'%s','%s','%s','%s,'%s','%s');";
+			+ "PRD_NAME,CONT_AMOUNT,CONT_BALANCE,CONT_NO,LOAN_TERM,LOAN_START_DATE,LOAN_END_DATE,CONT_STAT,MIAN_BR_NAME,CONT_NAME) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');";
 	private Long count=0L;
 	
 	private StringBuffer sb = new StringBuffer();
@@ -22,6 +22,7 @@ public class ContInfoHandler implements Handler{
 	public ContInfoHandler(String[] headers,String targetFileName){
 		this.headers=headers;
 		this.targetFileName=targetFileName;
+
 	}
 	
 	public void handle(List<?> list)  {

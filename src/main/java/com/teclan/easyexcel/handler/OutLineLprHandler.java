@@ -33,12 +33,13 @@ public class OutLineLprHandler implements Handler {
 
 		for (Object obj : list) {
 			OutLineLpr outLineLpr = (OutLineLpr) obj;
-//			LOGGER.info("{}",outLineLpr);
+
 			
 			if(Assert.assertNull(outLineLpr.getContNo())) {
+				LOGGER.info("跳过：{}",outLineLpr);
 				continue;
 			}
-
+			LOGGER.info("处理：{}",outLineLpr);
 			String sql = String.format(SQL_TEMPLAT, outLineLpr.getContNo(), outLineLpr.getBillNo(),
 					outLineLpr.getRateModel(), outLineLpr.getFloatCycle(), outLineLpr.getYmCycle(),
 					outLineLpr.getContDatum(), getBpType(outLineLpr.getContDpNumber()),

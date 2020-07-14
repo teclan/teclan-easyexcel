@@ -13,7 +13,7 @@ import com.teclan.easyexcel.model.ContInfo;
 public class ContInfoTest {
 	
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-	private static String fileName="excel/contInfo.xlsx";
+	private static String fileName="E:\\Documents\\桂林银行\\信贷系统\\开发需求\\谭炳健\\测试中\\人行基准转LPR的需求\\第四批收集-发送短信4.13-无密码.xlsx";
 	
 	@Test
 	public void getSql() {

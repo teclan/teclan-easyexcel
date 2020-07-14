@@ -2,6 +2,7 @@ package com.teclan.easyexcel.model;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.fastjson.JSON;
+import com.teclan.easyexcel.Utils.Assert;
 
 public class ContInfo {
 	@ExcelProperty("数据日期")
@@ -88,7 +89,11 @@ public class ContInfo {
 		this.certCode = certCode;
 	}
 	public String getPhone() {
-		return phone;
+		
+		if(Assert.assertNull(phone)) {
+			return "";
+		}
+		return phone.length()>11?phone.substring(0, 11):phone;
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
@@ -112,7 +117,7 @@ public class ContInfo {
 		this.contAmount = contAmount;
 	}
 	public String getContBalance() {
-		return contBalance;
+		return Assert.assertNull(contBalance)?"0":contBalance;
 	}
 	public void setContBalance(String contBalance) {
 		this.contBalance = contBalance;
