@@ -22,23 +22,23 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 	List< ExcelModel>list = new ArrayList<ExcelModel>();
 
 	private ExcelAnalysisHandler handler;
-	private boolean headerVaild=true;;
+
+	private boolean headerVaild=true;
+
+	/**
+	 * 严格模式，开启严格模式将校验表头顺序与给定顺序完全一致
+	 */
+	private boolean strictMode = true;
+
 
 	public AbstractAnalysisEventListener(ExcelAnalysisHandler handelr) {
 		this.handler = handelr;
 	}
-	
-	 public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-	        LOGGER.info("解析到表头数据:{}", JSON.toJSONString(headMap));
-	        String[] header = handler.getHeaders();
-	        for(int i=0;i<header.length;i++) {
-	        	if(!Assert.assertEquals(header[i], headMap.get(Integer.valueOf(i)))) {
-	        		LOGGER.error("\n表头不匹配，位置:{}，预期[{}]->实际[{}]",i,header[i],headMap.get(Integer.valueOf(i)));
-	        		headerVaild=false;
-	        		return;
-	        	}
-	        }
-	    }
+
+	public void setStrictMode(boolean strictMode){
+		this.strictMode=strictMode;
+	}
+
 
 	public void invoke(ExcelModel data, AnalysisContext context) {
 		if(!headerVaild) {
@@ -83,7 +83,28 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 
 	@Override
 	public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
+		LOGGER.info("解析到表头数据:{}", JSON.toJSONString(headMap));
 
+		if(!strictMode){
+			LOGGER.info("表头顺序校验未开启...");
+			return;
+		}
+
+		String[] header = handler.getHeaders();
+		for(int i=0;i<header.length;i++) {
+
+			if(headMap.size()<=i){
+				LOGGER.error("\n表头不匹配，位置:{}，预期[{}]->实际[{}]",i,header[i],"未找到");
+				headerVaild=false;
+				return;
+			}
+
+			if(!Assert.assertEquals(header[i], headMap.get(Integer.valueOf(i)).getStringValue())) {
+				LOGGER.error("\n表头不匹配，位置:{}，预期[{}]->实际[{}]",i,header[i],headMap.get(Integer.valueOf(i)));
+				headerVaild=false;
+				return;
+			}
+		}
 	}
 
 	@Override
