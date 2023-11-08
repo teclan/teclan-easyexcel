@@ -5,6 +5,7 @@ import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.CellExtra;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.teclan.easyexcel.Utils.Assert;
 import com.teclan.easyexcel.handler.ExcelAnalysisHandler;
 import com.teclan.easyexcel.model.ExcelModel;
@@ -24,6 +25,7 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 	private ExcelAnalysisHandler handler;
 
 	private boolean headerVaild=true;
+
 
 	/**
 	 * 严格模式，开启严格模式将校验表头顺序与给定顺序完全一致
@@ -83,7 +85,20 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 
 	@Override
 	public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
-		LOGGER.info("解析到表头数据:{}", JSON.toJSONString(headMap));
+
+		JSONObject title = JSONObject.parseObject(JSON.toJSONString(headMap));
+		LOGGER.info("解析到表头数据:{}", title);
+
+		if(title.keySet().size()>702){
+			LOGGER.info("超过支持解析的最大列数（702）列，列范围[A-ZZ]...");
+			headerVaild=false;
+			return;
+		}
+
+		for(String key:title.keySet()){
+			JSONObject column = title.getJSONObject(key);
+			LOGGER.info("index : {}, name = {}",key,column.getString("stringValue"));
+		}
 
 		if(!strictMode){
 			LOGGER.info("表头顺序校验未开启...");
@@ -91,7 +106,7 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 		}
 
 		String[] header = handler.getHeaders();
-		for(int i=0;i<header.length;i++) {
+		for(int i=0;header!=null && i<header.length;i++) {
 
 			if(headMap.size()<=i){
 				LOGGER.error("\n表头不匹配，位置:{}，预期[{}]->实际[{}]",i,header[i],"未找到");
@@ -118,5 +133,13 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 
 	public void setHandler(ExcelAnalysisHandler handler) {
 		this.handler = handler;
+	}
+
+	public boolean isHeaderVaild() {
+		return headerVaild;
+	}
+
+	public void setHeaderVaild(boolean headerVaild) {
+		this.headerVaild = headerVaild;
 	}
 }
