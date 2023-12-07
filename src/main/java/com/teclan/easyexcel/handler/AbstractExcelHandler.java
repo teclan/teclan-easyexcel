@@ -11,12 +11,15 @@ import com.teclan.easyexcel.Utils.StyleExcelHandler;
 import com.teclan.easyexcel.listener.DefaultAnalysisEventListener;
 import com.teclan.easyexcel.model.ExcelModel;
 import com.teclan.easyexcel.model.ExcelSheetModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractExcelHandler implements ExcelHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractExcelHandler.class);
 
     private List<ExcelSheetModel> excelSheetModels = new ArrayList<ExcelSheetModel>();
     private String pathName;
@@ -107,11 +110,20 @@ public abstract class AbstractExcelHandler implements ExcelHandler {
     }
 
     public void read(){
+        read(0);
+    }
+
+    /**
+     * 工作表序号，从0开始计
+     * @param sheetNo
+     */
+    public void read(int sheetNo){
         ExcelReader excelReader = EasyExcel.read(pathName, excelModel, new DefaultAnalysisEventListener(excelAnalysisHandler)).build();
-        ReadSheet readSheet = EasyExcel.readSheet(0).build();
+        ReadSheet readSheet = EasyExcel.readSheet(sheetNo).build();
         excelReader.read(readSheet);
         excelReader.finish();
     }
+
     public void read( Class<?> cls, ReadListener readListener) {
         ExcelReader excelReader = EasyExcel.read(pathName, cls, readListener).build();
         ReadSheet readSheet = EasyExcel.readSheet(0).build();

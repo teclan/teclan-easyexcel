@@ -52,7 +52,17 @@ public interface ExcelHandler {
      */
     public void setData(List<ExcelSheetModel> excelSheetModels);
 
+
+    /**
+     * 默认解析第一个工作表
+     */
     public void read();
+
+    /**
+     * 工作表序号，从0开始计
+     * @param sheetNo
+     */
+    public void read(int sheetNo);
 
     /**
      * 解析Excel

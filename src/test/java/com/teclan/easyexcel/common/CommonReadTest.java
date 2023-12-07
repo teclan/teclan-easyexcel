@@ -18,4 +18,21 @@ public class CommonReadTest {
                 .read();
     }
 
+    @Test
+    public void read2()  {
+        new DefaultExcelHandler()
+                .setPath("D:\\数据治理\\押品系统+核心系统_存单信息-原稿.xlsx")
+                .setExcelAnalysisHandler(new DefaultExcelAnalysisHandler())
+                .setDataModel(DefExcelModel.class)
+                .read();
+    }
+
+    @Test
+    public void read3()  {
+        new DefaultExcelHandler()
+                .setPath("D:\\数据治理\\押品系统+核心系统_存单信息-原稿.xlsx")
+                .setExcelAnalysisHandler(new DefaultExcelAnalysisHandler())
+                .setDataModel(DefExcelModel.class)
+                .read(0);
+    }
 }

@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.teclan.easyexcel.Utils.Assert;
 import com.teclan.easyexcel.handler.ExcelAnalysisHandler;
+import com.teclan.easyexcel.model.Column;
 import com.teclan.easyexcel.model.ExcelModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,8 +97,9 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 		}
 
 		for(String key:title.keySet()){
-			JSONObject column = title.getJSONObject(key);
-			LOGGER.info("index : {}, name = {}",key,column.getString("stringValue"));
+			JSONObject object = title.getJSONObject(key);
+			LOGGER.info("index : {}, name = {}",key,object.getString("stringValue"));
+			Column column = new Column(key,object.getString("stringValue"));
 		}
 
 		if(!strictMode){
