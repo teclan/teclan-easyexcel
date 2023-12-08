@@ -7,8 +7,12 @@ import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.teclan.easyexcel.Utils.Assert;
+import com.teclan.easyexcel.Utils.Objects;
+import com.teclan.easyexcel.config.CommonConfig;
+import com.teclan.easyexcel.db.DBFactory;
 import com.teclan.easyexcel.handler.ExcelAnalysisHandler;
 import com.teclan.easyexcel.model.Column;
+import com.teclan.easyexcel.model.DefExcelModel;
 import com.teclan.easyexcel.model.ExcelModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +31,12 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 
 	private boolean headerVaild=true;
 
-
 	/**
 	 * 严格模式，开启严格模式将校验表头顺序与给定顺序完全一致
 	 */
 	private boolean strictMode = true;
 
+	private ArrayList<Column> columns = new ArrayList<Column>();
 
 	public AbstractAnalysisEventListener(ExcelAnalysisHandler handelr) {
 		this.handler = handelr;
@@ -99,7 +103,25 @@ public abstract class  AbstractAnalysisEventListener implements ReadListener<Exc
 		for(String key:title.keySet()){
 			JSONObject object = title.getJSONObject(key);
 			LOGGER.info("index : {}, name = {}",key,object.getString("stringValue"));
-			Column column = new Column(key,object.getString("stringValue"));
+			Column column = new Column(DefExcelModel.RANG[Integer.valueOf(key)],object.getString("stringValue"));
+			columns.add(column);
+		}
+		boolean createTable = CommonConfig.getConfig().getBoolean("createTable");
+		LOGGER.info("检测到建表配置：{}",createTable);
+		if(createTable){
+			String tableName = "table1";
+			LOGGER.info("即将建表 ...");
+			ArrayList<String> columns = new ArrayList<String>();
+			ArrayList<String> comments = new ArrayList<String>();
+
+			for(Column column: this.columns){
+				columns.add(String.format("%s varchar(2000) comment '%s' ",column.getName(),column.getComment()));
+			}
+
+			String createTableSql = String.format("create table %s (\n%s\n) ",tableName,Objects.Joiner(",\n",columns));
+
+			LOGGER.info(createTableSql);
+			DBFactory.getDb().exec(createTableSql);
 		}
 
 		if(!strictMode){

@@ -2,8 +2,9 @@
 
     "jdbc":{
         "driver": "com.mysql.cj.jdbc.Driver",
-        "url":"jdbc:mysql://127.0.0.1:3306/lottery?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT",
+        "url":"jdbc:mysql://127.0.0.1:3306/glb?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT",
         "username": "teclan",
         "password":"123..."
-    }
+    },
+    "createTable": true
 }
